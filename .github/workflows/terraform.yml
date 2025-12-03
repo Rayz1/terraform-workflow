@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# This is a basic workflow to help you get started with Actions
-
-=======
->>>>>>> 29a0628 (upload for the first time)
 name: Terraform CI
 
 on:
@@ -42,8 +37,8 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform Plan
-        run: terraform plan -input=false
+    #   - name: Terraform Plan
+    #     run: terraform plan -input=false
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan  
