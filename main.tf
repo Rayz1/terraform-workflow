@@ -1,5 +1,14 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.88.0"
+    }
+  }
+}
+
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-2"
 }
 
 # VPC
@@ -92,7 +101,7 @@ resource "aws_instance" "web" {
 
 # S3 bucket – could later be for logs, static files, or TF state
 resource "aws_s3_bucket" "bucket" {
-  bucket = var.s3_bucket_name
+  bucket = "rayz-tf-bucket-2025-us-east-2"
 
   tags = {
     Name = "${var.project_name}-bucket"
