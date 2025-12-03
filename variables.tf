@@ -18,8 +18,6 @@ variable "project_name" {
   description = "Prefix for resource names"
 }
 
-
-
 variable "instance_type" {
   type        = string
   description = "EC2 instance type"
@@ -29,7 +27,6 @@ variable "ssh_allowed_cidr" {
   description = "CIDR block allowed to SSH into EC2"
   type        = string
 }
-
 
 variable "key_pair_name" {
   type        = string

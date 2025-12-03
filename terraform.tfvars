@@ -1,12 +1,12 @@
-aws_region          = "us-east-2"
-project_name        = "terra-workflow"
-vpc_cidr            = "10.0.0.0/16"
-public_subnet_cidr  = "10.0.1.0/24"
-instance_type       = "t3.micro"
-key_pair_name       = "dev-project"                 # Your key pair
-ami_id              = "ami-0f5fcdfbd140e4ab7"       # Correct for us-east-2
-ssh_allowed_cidr   =  "0.0.0.0/0"                   # e.g. 98.XX.XX.XX/32
-s3_bucket_name      = "rayz-tf-bucket-2025-us-east-2"
+aws_region         = "us-east-2"
+project_name       = "terra-workflow"
+vpc_cidr           = "10.0.0.0/16"
+public_subnet_cidr = "10.0.1.0/24"
+instance_type      = "t3.micro"
+key_pair_name      = "dev-project"           # Your key pair
+ami_id             = "ami-0f5fcdfbd140e4ab7" # Correct for us-east-2
+ssh_allowed_cidr   = "0.0.0.0/0"             # e.g. 98.XX.XX.XX/32
+s3_bucket_name     = "rayz-tf-bucket-2025-us-east-2"
 
 
 

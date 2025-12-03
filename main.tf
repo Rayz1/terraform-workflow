@@ -1,14 +1,12 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.88.0"
-    }
+# S3 bucket – could later be for logs, static files, or TF state
+resource "aws_s3_bucket" "bucket" {
+  bucket = "rayz-tf-bucket-2025-us-east-2"
+  lifecycle {
+    prevent_destroy = false
   }
-}
-
-provider "aws" {
-  region = "us-east-2"
+  tags = {
+    Name = "${var.project_name}-bucket"
+  }
 }
 
 # VPC
@@ -30,6 +28,19 @@ resource "aws_subnet" "public" {
 
   tags = {
     Name = "${var.project_name}-public-subnet"
+  }
+}
+
+# EC2 instance
+resource "aws_instance" "web" {
+  ami                    = var.ami_id      # e.g. latest Amazon Linux 2
+  instance_type          = "t3.micro"
+  subnet_id              = aws_subnet.public.id
+  vpc_security_group_ids = [aws_security_group.ssh.id]
+  key_name               = var.key_pair_name
+
+  tags = {
+    Name = "${var.project_name}-web"
   }
 }
 
@@ -86,24 +97,6 @@ resource "aws_security_group" "ssh" {
   }
 }
 
-# EC2 instance
-resource "aws_instance" "web" {
-  ami                    = var.ami_id      # e.g. latest Amazon Linux 2
-  instance_type          = "t3.micro"
-  subnet_id              = aws_subnet.public.id
-  vpc_security_group_ids = [aws_security_group.ssh.id]
-  key_name               = var.key_pair_name
 
-  tags = {
-    Name = "${var.project_name}-web"
-  }
-}
 
-# S3 bucket – could later be for logs, static files, or TF state
-resource "aws_s3_bucket" "bucket" {
-  bucket = "rayz-tf-bucket-2025-us-east-2"
 
-  tags = {
-    Name = "${var.project_name}-bucket"
-  }
-}
