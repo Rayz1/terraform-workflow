@@ -1,37 +1,4 @@
-# S3 bucket – could later be for logs, static files, or TF state
-resource "aws_s3_bucket" "bucket" {
-  bucket = "rayz-tf-bucket-2025-us-east-2"
-  lifecycle {
-    prevent_destroy = false
-  }
-  tags = {
-    Name = "${var.project_name}-bucket"
-  }
-}
-
-# VPC
-resource "aws_vpc" "main" {
-  cidr_block           = var.vpc_cidr
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-
-  tags = {
-    Name = "${var.project_name}-vpc"
-  }
-}
-
-# Public subnet
-resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.public_subnet_cidr
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "${var.project_name}-public-subnet"
-  }
-}
-
-# EC2 instance
+# Compute - EC2 instance
 resource "aws_instance" "web" {
   ami                    = var.ami_id # e.g. latest Amazon Linux 2
   instance_type          = "t3.micro"
@@ -44,7 +11,41 @@ resource "aws_instance" "web" {
   }
 }
 
-# Internet Gateway
+
+# Storage - S3 bucket – could later be for logs, static files, or TF state
+resource "aws_s3_bucket" "bucket" {
+  bucket = "rayz-tf-bucket-2025-us-east-2"
+  lifecycle {
+    prevent_destroy = false
+  }
+  tags = {
+    Name = "${var.project_name}-bucket"
+  }
+}
+
+# Security group - VPC
+resource "aws_vpc" "main" {
+  cidr_block           = var.vpc_cidr
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
+  tags = {
+    Name = "${var.project_name}-vpc"
+  }
+}
+
+# Networking & Content Delivery - Public subnet
+resource "aws_subnet" "public" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnet_cidr
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "${var.project_name}-public-subnet"
+  }
+}
+
+# Networking & Content Delivery - Internet Gateway
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
@@ -53,7 +54,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# Route table for public subnet
+# Networking & Content Delivery - Route table for public subnet
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -67,6 +68,7 @@ resource "aws_route_table" "public" {
   }
 }
 
+# Networking & Content Delivery - Route table for public subnet
 resource "aws_route_table_association" "public_assoc" {
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
